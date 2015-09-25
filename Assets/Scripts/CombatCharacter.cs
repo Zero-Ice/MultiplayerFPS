@@ -2,15 +2,18 @@
 using System.Collections;
 
 public class CombatCharacter : MonoBehaviour {
-	[SerializeField] GameObject Player;
+	[SerializeField] GameObject Player; //first person character
 	[SerializeField] GameObject Weapon1, Weapon2;
 
+	byte Health;
 	byte currentWeaponState; //0 for gun, 1 for melee
 
 	private CombatStats combatStats1, combatStats2;
 
 	// Use this for initialization
 	void Start () {
+		Health = 100;
+
 		combatStats1 = Weapon1.GetComponent<CombatStats> (); //get weapon 1's stats
 		combatStats2 = Weapon2.GetComponent<CombatStats> (); //get weapon 2's stats
 
@@ -30,11 +33,22 @@ public class CombatCharacter : MonoBehaviour {
 				//Slash();
 			}
 		}
+
+		Debug.DrawRay (transform.position, Player.transform.forward);
 	}
 
 	void Shoot(){
-		GameObject bulletInstance = Instantiate (combatStats1.AmmoType, transform.position, transform.rotation) as GameObject;
-		bulletInstance.GetComponent<Bullet> ().direction = Player.transform.forward;//(Player.transform.rotation.x, transform.rotation.y, 0);
+		//GameObject bulletInstance = Instantiate (combatStats1.AmmoType, transform.position, transform.rotation) as GameObject;
+		//bulletInstance.GetComponent<Bullet> ().direction = Player.transform.forward;//(Player.transform.rotation.x, transform.rotation.y, 0);
+		RaycastHit hit;
+		Vector3 bulletDir = Player.transform.forward;
+		if (Physics.Raycast (transform.position, bulletDir, out hit)) {
+			Debug.Log("Bullet hit");
+			if(hit.transform.gameObject.tag == "EntityMob"){
+				Debug.Log("hit a mob");
+			}
+		}
+
 	}
 
 
