@@ -12,6 +12,7 @@ public class CombatCharacter : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+	Cursor.lockState = CursorLockMode.Locked;
 		Health = 100;
 
 		combatStats1 = Weapon1.GetComponent<CombatStats> (); //get weapon 1's stats
@@ -34,19 +35,18 @@ public class CombatCharacter : MonoBehaviour {
 			}
 		}
 
-		Debug.DrawRay (transform.position, Player.transform.forward);
+		Debug.DrawRay (Player.transform.position, Player.transform.forward*50, Color.green);
 	}
 
 	void Shoot(){
 		//GameObject bulletInstance = Instantiate (combatStats1.AmmoType, transform.position, transform.rotation) as GameObject;
 		//bulletInstance.GetComponent<Bullet> ().direction = Player.transform.forward;//(Player.transform.rotation.x, transform.rotation.y, 0);
 		RaycastHit hit;
-		Vector3 bulletDir = Player.transform.forward;
-		if (Physics.Raycast (transform.position, bulletDir, out hit)) {
-			Debug.Log("Bullet hit");
-			if(hit.transform.gameObject.tag == "EntityMob"){
+		if (Physics.Raycast (Player.transform.position, Player.transform.forward*50, out hit)) {
+			if(hit.transform.gameObject.tag == "EntityMob")
 				Debug.Log("hit a mob");
-			}
+			else
+				Debug.Log("hit nothing");
 		}
 
 	}
